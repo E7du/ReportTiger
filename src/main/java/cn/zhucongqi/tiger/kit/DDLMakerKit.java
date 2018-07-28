@@ -109,8 +109,8 @@ public class DDLMakerKit {
 		}
 		ReportTigerMappingInfo mappinginfo = new ReportTigerMappingInfo();
 		mappinginfo.setCode(code);
-		List<ReportTigerMappingInfo> mappingInfos = mappinginfo.findOne();
-		if (null != mappingInfos && mappingInfos.size() == 1) {
+		ReportTigerMappingInfo mappingInfos = mappinginfo.findOne();
+		if (null != mappingInfos) {
 			return true;
 		}
 		return false;

@@ -4,7 +4,6 @@
 package cn.zhucongqi.tiger.services;
 
 import java.math.BigInteger;
-import java.util.List;
 
 import com.jfinal.ext.core.Service;
 import com.jfinal.ext.kit.DateTimeKit;
@@ -53,9 +52,9 @@ public class CodeDataService extends Service {
 	public boolean isTimeOut(String token){
 		ReportTigerDeviceToken deviceToken = new ReportTigerDeviceToken();
 		deviceToken.setToken(token);
-		List<ReportTigerDeviceToken> deviceTokens = deviceToken.findOne();
-		if (null != deviceTokens && deviceTokens.size() == 1) {
-			BigInteger timeout = deviceTokens.get(0).getTimeout();
+		ReportTigerDeviceToken deviceTokens = deviceToken.findOne();
+		if (null != deviceTokens) {
+			BigInteger timeout = deviceTokens.getTimeout();
 			return DateTimeKit.getCurrentUnixTime() < Long.valueOf(timeout.toString()) ;
 		}
 		return false;

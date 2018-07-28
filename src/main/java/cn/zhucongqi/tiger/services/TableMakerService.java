@@ -20,7 +20,7 @@ public class TableMakerService extends Service {
 	 * @return
 	 */
 	public List<ReportTigerAppSecretKeys> getAllApps(){
-		return (new ReportTigerAppSecretKeys().find());//.dao.find("SELECT id, package_name FROM "+ "");
+		return (new ReportTigerAppSecretKeys().find());
 	}
 	
 	/**

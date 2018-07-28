@@ -1,7 +1,6 @@
 package cn.zhucongqi.tiger.services;
 
 import java.math.BigInteger;
-import java.util.List;
 
 import com.jfinal.ext.core.Service;
 import com.jfinal.ext.kit.DateTimeKit;
@@ -30,13 +29,13 @@ public class AppSecretKeysService extends Service {
 		ReportTigerAppSecretKeys fetch = new ReportTigerAppSecretKeys();
 		fetch.setAppkey(appkey);
 		fetch.setBundle(bundle);
-		List<ReportTigerAppSecretKeys> appSecretKeys = ReportTigerAppSecretKeys.dao.findOne();
+		ReportTigerAppSecretKeys appSecretKeys = fetch.findOne();
 		
 		ReportTigerDeviceToken deviceToken= new ReportTigerDeviceToken();
 		String token = null;
 		Long timeout = null;
 		
-		if (null != appSecretKeys && appSecretKeys.size() == 1) {
+		if (null != appSecretKeys) {
 			token = RandomKit.randomMD5Str();
 			timeout = DateTimeKit.getUnixTimeAfterDay(Consts.TOKEN_TIMEOUT_DAYS);
 			deviceToken.setUuid(uuid);
@@ -86,8 +85,8 @@ public class AppSecretKeysService extends Service {
 		packageName = this.wrapPackagename(packageName);
 		ReportTigerAppSecretKeys appSecretKey = new ReportTigerAppSecretKeys();
 		appSecretKey.setPackageName(packageName);
-		List<ReportTigerAppSecretKeys> appSecretKeys = appSecretKey.findOne();
-		if (!appSecretKeys.isEmpty()) {
+		ReportTigerAppSecretKeys appSecretKeys = appSecretKey.findOne();
+		if (appSecretKeys != null) {
 			this.controller.renderText("包名称:<br/>" + packageName
 					+ "已经存在,请重新输入！");
 		} else {
