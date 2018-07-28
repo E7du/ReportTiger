@@ -14,7 +14,7 @@ import com.jfinal.plugin.activerecord.Record;
 
 import cn.zhucongqi.tiger.kit.DDLMakerKit;
 import cn.zhucongqi.tiger.kit.UserAgentKit;
-import cn.zhucongqi.tiger.model.TigerDeviceToken;
+import cn.zhucongqi.tiger.model.ReportTigerDeviceToken;
 
 /**
  * 数据记录 Service
@@ -29,12 +29,10 @@ public class CodeDataService extends Service {
 	 * @param clList
 	 */
 	public void logData(String token, String code, String jsondata){
-		
 		if (!isTimeOut(token)) {
 			this.controller.renderNull();
 		}
-		
-		String platformName = UserAgentKit.platformName(this.controller.getRequest().getHeader("User-Agent"));
+		String platformName = UserAgentKit.platformName(this.controller.getRequest());
 		// update info id
 		String infoTableName = DDLMakerKit.codeInfoTableName(code, platformName);
 		Record info = new Record();
@@ -50,15 +48,14 @@ public class CodeDataService extends Service {
 	/**
 	 * token 是否过期
 	 * @param tocken
-	 * @return
 	 * TODO 3小时内才算过期
 	 */
 	public boolean isTimeOut(String token){
-	
-		List<TigerDeviceToken> deviceTokens = TigerDeviceToken.dao.find("SELECT * FROM "
-				+ TigerDeviceToken.table + " WHERE token = ?  LIMIT 1 ", token);
+		ReportTigerDeviceToken deviceToken = new ReportTigerDeviceToken();
+		deviceToken.setToken(token);
+		List<ReportTigerDeviceToken> deviceTokens = deviceToken.findOne();
 		if (null != deviceTokens && deviceTokens.size() == 1) {
-			BigInteger timeout = deviceTokens.get(0).get("timeout");
+			BigInteger timeout = deviceTokens.get(0).getTimeout();
 			return DateTimeKit.getCurrentUnixTime() < Long.valueOf(timeout.toString()) ;
 		}
 		return false;

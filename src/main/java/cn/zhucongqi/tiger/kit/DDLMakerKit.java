@@ -10,7 +10,7 @@ import com.jfinal.plugin.activerecord.Db;
 
 import cn.zhucongqi.tiger.consts.Consts;
 import cn.zhucongqi.tiger.data.DataKit;
-import cn.zhucongqi.tiger.model.TigerMappingInfo;
+import cn.zhucongqi.tiger.model.ReportTigerMappingInfo;
 import cn.zhucongqi.tiger.models.Platform;
 import cn.zhucongqi.tiger.models.TableMaker;
 import cn.zhucongqi.tiger.models.TableMaker.TableType;
@@ -104,13 +104,12 @@ public class DDLMakerKit {
 	 * @return
 	 */
 	private Boolean codeExistCheck(String code) {
-		
 		if (StrKit.isBlank(code)) {
 			return false;
 		}
-		List<TigerMappingInfo> mappingInfos = TigerMappingInfo.dao
-				.find("SELECT m.id FROM "+TigerMappingInfo.table+" m WHERE m.code = ? LIMIT 1",
-						code);
+		ReportTigerMappingInfo mappinginfo = new ReportTigerMappingInfo();
+		mappinginfo.setCode(code);
+		List<ReportTigerMappingInfo> mappingInfos = mappinginfo.findOne();
 		if (null != mappingInfos && mappingInfos.size() == 1) {
 			return true;
 		}
@@ -125,7 +124,7 @@ public class DDLMakerKit {
 	 * @return
 	 */
 	private Boolean codeMapping(TableMaker tableMaker) {
-		TigerMappingInfo mapping = new TigerMappingInfo();
+		ReportTigerMappingInfo mapping = new ReportTigerMappingInfo();
 		mapping.setCode(tableMaker.getCode());
 		mapping.setIntro(tableMaker.getIntro());
 		mapping.setAppid(new BigInteger(tableMaker.getAppId()));

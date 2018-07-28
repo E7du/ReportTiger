@@ -1,8 +1,10 @@
 package cn.zhucongqi.tiger.kit;
 
-import cn.zhucongqi.tiger.models.Platform;
+import javax.servlet.http.HttpServletRequest;
 
 import com.jfinal.kit.StrKit;
+
+import cn.zhucongqi.tiger.models.Platform;
   
 /** 
  * 获取请求对应的 platformname
@@ -19,8 +21,12 @@ public class UserAgentKit {
 	 * @param userAgent
 	 * @return
 	 */
-    public static String platformName(String userAgent){  
+    public static String platformName(HttpServletRequest request){  
+    	if (null == request) {
+			return "";
+		}
     	
+    	String userAgent = request.getHeader("User-Agent");
     	if (StrKit.isBlank(userAgent)) {
 			return "";
 		}

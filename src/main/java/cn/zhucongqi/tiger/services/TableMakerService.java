@@ -5,7 +5,7 @@ import java.util.List;
 import com.jfinal.ext.core.Service;
 
 import cn.zhucongqi.tiger.kit.DDLMakerKit;
-import cn.zhucongqi.tiger.model.TigerAppSecretKeys;
+import cn.zhucongqi.tiger.model.ReportTigerAppSecretKeys;
 import cn.zhucongqi.tiger.models.TableMaker;
 
 /**
@@ -19,8 +19,8 @@ public class TableMakerService extends Service {
 	 * 获取所有的 apps
 	 * @return
 	 */
-	public List<TigerAppSecretKeys> getAllApps(){
-		return TigerAppSecretKeys.dao.find("SELECT id, package_name FROM "+TigerAppSecretKeys.table);
+	public List<ReportTigerAppSecretKeys> getAllApps(){
+		return (new ReportTigerAppSecretKeys().find());//.dao.find("SELECT id, package_name FROM "+ "");
 	}
 	
 	/**

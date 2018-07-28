@@ -13,7 +13,7 @@ CREATE TABLE `report_tiger_app_secret_keys` (
   `secretkeysalt` varchar(32) NOT NULL COMMENT '安全密钥key的salt',
   PRIMARY KEY (`id`),
   UNIQUE KEY `bundle` (`bundle`),
-  UNIQUE KEY `package` (`package`)
+  UNIQUE KEY `package_name` (`package_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='客户端授权';
 
 -- ----------------------------

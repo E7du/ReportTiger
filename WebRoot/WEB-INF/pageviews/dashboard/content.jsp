@@ -14,7 +14,7 @@
 </div>
 <div class='alert alert-info'>
     Welcome to
-    <strong>Tiger</strong>
+    <strong>ReportTiger</strong>
 </div>
 </div>
 </div>

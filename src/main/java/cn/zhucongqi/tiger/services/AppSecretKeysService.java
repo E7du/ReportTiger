@@ -9,8 +9,8 @@ import com.jfinal.ext.kit.RandomKit;
 import com.jfinal.kit.HashKit;
 
 import cn.zhucongqi.tiger.consts.Consts;
-import cn.zhucongqi.tiger.model.TigerAppSecretKeys;
-import cn.zhucongqi.tiger.model.TigerDeviceToken;
+import cn.zhucongqi.tiger.model.ReportTigerAppSecretKeys;
+import cn.zhucongqi.tiger.model.ReportTigerDeviceToken;
 
 /**
  * 处理移动客户端请求
@@ -27,12 +27,12 @@ public class AppSecretKeysService extends Service {
 	 * @return
 	 */
 	public void authDevice(String uuid, String appkey, String bundle){
-		List<TigerAppSecretKeys> appSecretKeys = TigerAppSecretKeys.dao.find("SELECT * FROM " + TigerAppSecretKeys.table + " WHERE bundle = ? "
-				+ "AND appkey = ? "
-				+ "AND secretkey=md5(concat(secretkeysalt,bundle,"
-				+ "appkey,secretkeysalt,appkey,bundle,secretkeysalt)) LIMIT 1 ", bundle, appkey);
-
-		TigerDeviceToken deviceToken= new TigerDeviceToken();
+		ReportTigerAppSecretKeys fetch = new ReportTigerAppSecretKeys();
+		fetch.setAppkey(appkey);
+		fetch.setBundle(bundle);
+		List<ReportTigerAppSecretKeys> appSecretKeys = ReportTigerAppSecretKeys.dao.findOne();
+		
+		ReportTigerDeviceToken deviceToken= new ReportTigerDeviceToken();
 		String token = null;
 		Long timeout = null;
 		
@@ -63,7 +63,7 @@ public class AppSecretKeysService extends Service {
 		String bundle = HashKit.md5(packageval);
 		String secretkey = HashKit.md5(secretkeysalt + bundle + appKey
 				+ secretkeysalt + appKey + bundle + secretkeysalt);
-		TigerAppSecretKeys appSecretKeys = new TigerAppSecretKeys();
+		ReportTigerAppSecretKeys appSecretKeys = new ReportTigerAppSecretKeys();
 		appSecretKeys.setId(new BigInteger("0"));
 		appSecretKeys.setBundle(bundle);
 		appSecretKeys.setAppkey(appKey);
@@ -82,16 +82,16 @@ public class AppSecretKeysService extends Service {
 	 * 校验包名称是否已被注册。
 	 * @param packagevalue
 	 */
-	public void validatePackage(String packagevalue) {
-		packagevalue = this.wrapPackagename(packagevalue);
-		List<TigerAppSecretKeys> appSecretKeys = TigerAppSecretKeys.dao.find(
-				"SELECT id FROM " + TigerAppSecretKeys.table
-						+ " WHERE package_name = ? LIMIT 1", packagevalue);
+	public void validatePackage(String packageName) {
+		packageName = this.wrapPackagename(packageName);
+		ReportTigerAppSecretKeys appSecretKey = new ReportTigerAppSecretKeys();
+		appSecretKey.setPackageName(packageName);
+		List<ReportTigerAppSecretKeys> appSecretKeys = appSecretKey.findOne();
 		if (!appSecretKeys.isEmpty()) {
-			this.controller.renderText("包名称:<br/>" + packagevalue
+			this.controller.renderText("包名称:<br/>" + packageName
 					+ "已经存在,请重新输入！");
 		} else {
-			this.controller.renderText("包名称:<br/>" + packagevalue + "可以使用！");
+			this.controller.renderText("包名称:<br/>" + packageName + "可以使用！");
 		}
 	}
 	
